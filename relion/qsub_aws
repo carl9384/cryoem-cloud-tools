@@ -78,7 +78,7 @@ def s3_to_ebs_movie(IP,keypair,bucketname,dironebs,rclonepath,keyid,secretid,reg
         r1.write('storage_class = STANDARD\n')
         r1.close()
 
-        cmd='scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i %s rclone.conf ubuntu@%s:~/.rclone.conf' %(keypair,IP)
+        cmd='scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i %s .rclone.conf ubuntu@%s:~/.rclone.conf' %(keypair,IP)
         subprocess.Popen(cmd,shell=True).wait()
 
         #Copy data down

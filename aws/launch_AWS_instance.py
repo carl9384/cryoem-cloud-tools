@@ -245,6 +245,7 @@ def launchInstance(params,keyName,keyPath,AMI,AWS_ACCOUNT_ID):
 		sys.exit()
 	    InstanceID=InstanceID.split()[-1].split('"')[1]
    	    Status='init'
+	    print('instance id is %s'%(InstanceID))
     	    while Status != 'running':
 	    	Status=subprocess.Popen('aws ec2 describe-instances --instance-id %s --query "Reservations[*].Instances[*].{State:State}" | grep Name' %(InstanceID),shell=True, stdout=subprocess.PIPE).stdout.read().strip().split()[-1].split('"')[1]
 
@@ -363,18 +364,20 @@ def AttachMountEBSVol(instanceID,volID,PublicIP,keyPath,params):
    time.sleep(10)
    env.host_string='ubuntu@%s' %(PublicIP)
    env.key_filename = '%s' %(keyPath)
-   dir_exists=exec_remote_cmd('ls /data')
+   dir_exists=exec_remote_cmd('ls /gpfs')
+   #dir_exists=exec_remote_cmd('ls /data')
    if len(dir_exists.split()) >0: 
 	if dir_exists.split()[2] == 'access': 
-		mk=exec_remote_cmd('sudo mkdir /data/') 
+		#mk=exec_remote_cmd('sudo mkdir /data/') 
+		mk=exec_remote_cmd('sudo mkdir /gpfs/') 
    check_NFS=exec_remote_cmd('sudo file -s /dev/xvdf')
    if 'filesystem' not in check_NFS:
 	nfsmount=exec_remote_cmd('sudo mkfs -t ext4 /dev/xvdf')
-   mount_out=exec_remote_cmd('sudo mount /dev/xvdf /data')
-   chmod=exec_remote_cmd('sudo chmod 777 /data/')
+   mount_out=exec_remote_cmd('sudo mount /dev/xvdf /gpfs')
+   chmod=exec_remote_cmd('sudo chmod 777 /gpfs/')
    if 'filesystem' not in check_NFS:
-	chmod=exec_remote_cmd('rm /data/lost+found')
-   print '\n...volume mounted onto /data/ ...\n' 
+	chmod=exec_remote_cmd('rm /gpfs/lost+found')
+   print '\n...volume mounted onto /gpfs/ ...\n' 
 
 #====================
 def module_exists(module_name):

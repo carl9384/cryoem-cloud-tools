@@ -173,7 +173,8 @@ def checkConflicts(params,instanceType):
     	sys.exit()
     if AWS_DEFAULT_REGION == 'us-east-1':
 	if instanceType.split('.')[0] == 'p2':
-        	AMI='ami-69eba27e'
+	#	AMI='ami-69eba27e'
+        	AMI='ami-38b2ed2e'
     	if instanceType.split('.')[0] != 'p2':
         	AMI='ami-ec3a3b84'
     if AWS_DEFAULT_REGION == 'us-west-2':
